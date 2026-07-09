@@ -1,0 +1,8 @@
+.env
+*.db
+medical_data.json
+uploads/
+__pycache__/
+*.py[cod]
+.venv/
+venv/

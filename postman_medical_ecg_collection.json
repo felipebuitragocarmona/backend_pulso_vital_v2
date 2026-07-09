@@ -1,0 +1,157 @@
+{
+  "info": {
+    "name": "Medical ECG API - Patients and Apple Watch ECG PDFs",
+    "description": "Colección para probar CRUD de pacientes y carga de múltiples PDFs ECG asociados a cada paciente.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "patientId",
+      "value": "1"
+    },
+    {
+      "key": "ecgId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Crear paciente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Javier Prieto\",\n  \"birthDate\": \"1990-05-20\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Listar pacientes",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"]
+        }
+      }
+    },
+    {
+      "name": "Ver un paciente",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      }
+    },
+    {
+      "name": "Actualizar paciente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Javier Prieto Tejedor\",\n  \"birthDate\": \"1990-05-20\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Eliminar paciente",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      }
+    },
+    {
+      "name": "Subir PDF ECG de Apple Watch",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}/ecgs/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}", "ecgs", "upload"]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "registeredAt",
+              "value": "2026-06-28T00:01:00",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Listar ECGs de un paciente",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}/ecgs",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}", "ecgs"]
+        }
+      }
+    },
+    {
+      "name": "Ver un ECG",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/ecgs/{{ecgId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["ecgs", "{{ecgId}}"]
+        }
+      }
+    },
+    {
+      "name": "Eliminar ECG",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/ecgs/{{ecgId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["ecgs", "{{ecgId}}"]
+        }
+      }
+    }
+  ]
+}
