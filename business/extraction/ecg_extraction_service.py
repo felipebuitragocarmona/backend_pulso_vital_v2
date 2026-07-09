@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from infrastructure.extractors.ecg_extractor_factory import EcgExtractorFactory
+from infrastructure.extractors.ecg_extractor_factory import EcgExtractorCreator
 
 
 class EcgExtractionService:
@@ -13,13 +13,13 @@ class EcgExtractionService:
     Pandas o Matplotlib. Esa lógica queda en el extractor concreto.
     """
 
-    def __init__(self, extractor_factory: Optional[EcgExtractorFactory] = None) -> None:
-        self.extractor_factory = extractor_factory or EcgExtractorFactory()
+    def __init__(self, extractor_factory: Optional[EcgExtractorCreator] = None) -> None:
+        self.extractor_factory = extractor_factory or EcgExtractorCreator()
 
     def extract_from_pdf(
         self,
         pdf_path: str,
-        source: str = "apple_watch",
+        source: Optional[str] = None,
         output_dir: Optional[str] = None
     ) -> Dict[str, Any]:
         pdf_file = Path(pdf_path)
@@ -31,7 +31,8 @@ class EcgExtractionService:
             output_dir=output_dir
         )
 
-        extractor = self.extractor_factory.create(source)
+        resolved_source = self.extractor_factory.resolve_source(source)
+        extractor = self.extractor_factory.create(resolved_source)
 
         extraction_result = extractor.extract_from_pdf(
             pdf_path=pdf_file.as_posix(),
@@ -40,7 +41,7 @@ class EcgExtractionService:
 
         return {
             "processed": True,
-            "source": source,
+            "source": resolved_source,
             "pdfPath": pdf_file.as_posix(),
             "outputDir": final_output_dir.as_posix(),
             "result": extraction_result

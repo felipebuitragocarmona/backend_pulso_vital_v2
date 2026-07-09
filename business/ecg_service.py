@@ -114,7 +114,7 @@ class EcgService:
         try:
             extraction_result = self.ecg_extraction_service.extract_from_pdf(
                 pdf_path=file_path.as_posix(),
-                source="apple_watch",
+                source=None,
                 output_dir=output_dir.as_posix(),
             )
 

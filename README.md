@@ -77,6 +77,30 @@ ecgs
 
 Al eliminar un paciente, la base elimina sus ECG asociados mediante `ON DELETE CASCADE`. Además, el servicio elimina la carpeta física del paciente en `uploads/ecgs/patient_{id}`.
 
+## Selección de extractor ECG (Factory Method)
+
+La extracción de ECG usa inversión de dependencias con `EcgExtractorInterface` + Factory Method por creators concretos:
+
+- `AppleWatchCreator`
+- `KardiaCreator`
+- `SamsungHealthCreator`
+
+Puedes seleccionar la fuente por variable de entorno:
+
+```env
+ECG_EXTRACTOR_SOURCE=apple_watch
+```
+
+Valores soportados actualmente:
+
+- `apple_watch`
+- `kardia`
+- `samsung` (placeholder, aún no implementado en detalle)
+
+Alias aceptados: `apple`, `applewatch`, `alivecor`, `kardia_mobile`, `samsung_health`.
+
+Si envías explícitamente `source` al servicio de extracción, ese valor tiene prioridad sobre el valor de entorno.
+
 ## Cómo extender un repositorio concreto
 
 Si necesitas una consulta especial, no agregues métodos a una interfaz global. Agrégala únicamente al repositorio que la necesita.
