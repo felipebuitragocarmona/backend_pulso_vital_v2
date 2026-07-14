@@ -16,6 +16,7 @@ from infrastructure.extractors.ecg_processing_core import (
     SimpleValidator,
     ECGExtractorError,
 )
+from infrastructure.extractors.npy_ecg_feature_extractor import NpyEcgFeatureExtractor
 
 
 # ── Estilo ECG papel ─────────────────────────────────────────────────────────
@@ -316,6 +317,9 @@ class AppleWatchEcgPdfExtractor(EcgExtractorInterface):
                 duration_seconds=30.0,
             )
 
+            NpyEcgFeatureExtractor().extract_and_save(npy_path.as_posix())
+            features_csv_path = output_path / "ecg_data_features.csv"
+
             validation = SimpleValidator.validate(df)
 
             return {
@@ -335,7 +339,8 @@ class AppleWatchEcgPdfExtractor(EcgExtractorInterface):
                     "excel": excel_path.as_posix(),
                     "image": image_path.as_posix(),
                     "imagePaper": paper_image_path.as_posix(),
-                    "npy": npy_path.as_posix()
+                    "npy": npy_path.as_posix(),
+                    "features": features_csv_path.as_posix()
                 }
             }
 
