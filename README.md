@@ -173,3 +173,39 @@ python main_mcp_server.py
 - `GET /patients/{patient_id}/ecgs`
 - `GET /ecgs/{ecg_id}`
 - `DELETE /ecgs/{ecg_id}`
+
+## Exponer el servidor públicamente con Cloudflare Tunnel
+
+Para usar el servidor MCP desde Claude (u otro cliente externo) sin necesidad de despliegue en la nube, puedes exponerlo temporalmente mediante **Cloudflare Tunnel**. Esto crea una URL pública `https://` que apunta a tu servidor local.
+
+### Requisitos
+
+Instala `cloudflared` desde [https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/) o con:
+
+```powershell
+winget install Cloudflare.cloudflared
+```
+
+### Pasos
+
+1. Levanta el servidor MCP en el puerto 9000:
+
+```powershell
+python -m uvicorn main_api_rest_server:app --reload --port 9000
+```
+
+2. En otra terminal, abre el túnel:
+
+```powershell
+cloudflared tunnel --url http://localhost:9000
+```
+
+3. `cloudflared` imprimirá una URL pública similar a:
+
+```
+https://random-name-here.trycloudflare.com
+```
+
+4. Copia esa URL y úsala en Claude como base del servidor MCP o REST.
+
+> **Nota:** cada vez que ejecutes el comando se genera una URL distinta. El túnel se cierra al terminar el proceso. Para una URL estable, considera crear un túnel con nombre usando `cloudflared tunnel create <nombre>`.
