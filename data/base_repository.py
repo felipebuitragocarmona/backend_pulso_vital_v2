@@ -1,7 +1,8 @@
 from dataclasses import asdict, fields as dataclass_fields, is_dataclass
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
+import math
+from typing import Any, Dict, Generic, List, Optional, Tuple, Type, TypeVar
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 ORMType = TypeVar("ORMType")
@@ -106,6 +107,21 @@ class GenericRepository(Generic[ORMType, EntityType]):
                 return False
             session.delete(row)
             return True
+
+    def find_paged(self, page: int, page_size: int) -> Tuple[List[Dict[str, Any]], int]:
+        """Retorna una página de registros y el total de elementos."""
+
+        with self.session_factory() as session:
+            order_column = getattr(self.orm_model, self.id_field)
+            total: int = session.scalar(select(func.count()).select_from(self.orm_model)) or 0
+            offset = (page - 1) * page_size
+            rows = session.scalars(
+                select(self.orm_model)
+                .order_by(order_column.asc())
+                .offset(offset)
+                .limit(page_size)
+            ).all()
+            return [self._to_dict(row) for row in rows], total
 
     def find_by_fields(self, **filters: Any) -> List[Dict[str, Any]]:
         """Consulta genérica por igualdad para campos existentes del modelo."""

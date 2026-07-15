@@ -1,4 +1,5 @@
 from datetime import datetime
+import math
 from pathlib import Path
 import shutil
 from typing import Any, Dict, List, Optional
@@ -41,6 +42,16 @@ class PatientService:
 
     def list_patients(self) -> List[Patient]:
         return [Patient(**patient) for patient in self.repo.find_all()]
+
+    def list_patients_paged(self, page: int, page_size: int) -> Dict[str, Any]:
+        items, total = self.repo.find_paged(page, page_size)
+        return {
+            "data": [Patient(**p) for p in items],
+            "page": page,
+            "pageSize": page_size,
+            "totalItems": total,
+            "totalPages": math.ceil(total / page_size) if page_size > 0 else 0,
+        }
 
     def get_patient(self, patient_id: int) -> Optional[Patient]:
         patient = self.repo.find_by_id(int(patient_id))

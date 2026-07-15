@@ -1,6 +1,6 @@
-from typing import List
+from typing import Any, Dict, List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from business.patient_service import PatientService
 from data.repository_factory import get_repositories
@@ -17,9 +17,12 @@ def create_patient(data: PatientCreate):
     return patient_service.create_patient(data)
 
 
-@router.get("/patients", response_model=List[Patient])
-def list_patients():
-    return patient_service.list_patients()
+@router.get("/patients", response_model=Dict[str, Any])
+def list_patients(
+    page: int = Query(default=1, ge=1),
+    pageSize: int = Query(default=10, ge=1, le=100),
+):
+    return patient_service.list_patients_paged(page, pageSize)
 
 
 @router.get("/patients/{patient_id}", response_model=Patient)
