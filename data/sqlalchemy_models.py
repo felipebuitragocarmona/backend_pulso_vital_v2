@@ -60,3 +60,24 @@ class CategoryORM(Base):
     children: Mapped[List["CategoryORM"]] = relationship(
         back_populates="parent",
     )
+
+
+class AIModelCategoryORM(Base):
+    __tablename__ = "ai_model_categories"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    category_parent_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("ai_model_categories.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    parent: Mapped[Optional["AIModelCategoryORM"]] = relationship(
+        remote_side=[id],
+        back_populates="children",
+    )
+    children: Mapped[List["AIModelCategoryORM"]] = relationship(
+        back_populates="parent",
+    )

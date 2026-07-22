@@ -5,7 +5,8 @@ from functools import lru_cache
 
 from dotenv import load_dotenv
 
-from .category_repository import CategoryRepository
+from .ai_model_category_repository import AIModelCategoryRepository
+from .medical_category_repository import MedicalCategoryRepository
 from .database import Database
 from .ecg_repository import EcgRepository
 from .patient_repository import PatientRepository
@@ -25,7 +26,12 @@ class RepositoryProvider:
     database: Database
     patients: PatientRepository
     ecgs: EcgRepository
-    categories: CategoryRepository
+    medical_categories: MedicalCategoryRepository
+    ai_model_categories: AIModelCategoryRepository
+
+    @property
+    def categories(self) -> MedicalCategoryRepository:
+        return self.medical_categories
 
 
 class RelationalRepositoryFactory:
@@ -40,7 +46,8 @@ class RelationalRepositoryFactory:
             database=self.database,
             patients=PatientRepository(self.database.SessionLocal),
             ecgs=EcgRepository(self.database.SessionLocal),
-            categories=CategoryRepository(self.database.SessionLocal),
+            medical_categories=MedicalCategoryRepository(self.database.SessionLocal),
+            ai_model_categories=AIModelCategoryRepository(self.database.SessionLocal),
         )
 
 

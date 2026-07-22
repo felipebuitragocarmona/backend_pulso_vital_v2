@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Medical ECG API - Patients and Apple Watch ECG PDFs",
-    "description": "Colección para probar CRUD de pacientes y carga de múltiples PDFs ECG asociados a cada paciente.",
+    "name": "Medical ECG API - MedicalCategory and AIModelCategory",
+    "description": "Colección para probar CRUD de MedicalCategory y AIModelCategory, organizada por carpetas.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -10,231 +10,240 @@
       "value": "http://localhost:5000"
     },
     {
-      "key": "patientId",
+      "key": "medicalCategoryId",
       "value": "1"
     },
     {
-      "key": "ecgId",
-      "value": "1"
-    },
-    {
-      "key": "categoryId",
+      "key": "aiModelCategoryId",
       "value": "1"
     }
   ],
   "item": [
     {
-      "name": "Crear paciente",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/patients",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients"]
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"fullName\": \"Javier Prieto\",\n  \"birthDate\": \"1990-05-20\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Listar pacientes",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/patients",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients"]
-        }
-      }
-    },
-    {
-      "name": "Ver un paciente",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/patients/{{patientId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients", "{{patientId}}"]
-        }
-      }
-    },
-    {
-      "name": "Actualizar paciente",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/patients/{{patientId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients", "{{patientId}}"]
-        },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"fullName\": \"Javier Prieto Tejedor\",\n  \"birthDate\": \"1990-05-20\"\n}"
-        }
-      }
-    },
-    {
-      "name": "Eliminar paciente",
-      "request": {
-        "method": "DELETE",
-        "url": {
-          "raw": "{{baseUrl}}/patients/{{patientId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients", "{{patientId}}"]
-        }
-      }
-    },
-    {
-      "name": "Subir PDF ECG de Apple Watch",
-      "request": {
-        "method": "POST",
-        "url": {
-          "raw": "{{baseUrl}}/patients/{{patientId}}/ecgs/upload",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients", "{{patientId}}", "ecgs", "upload"]
-        },
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "registeredAt",
-              "value": "2026-06-28T00:01:00",
-              "type": "text"
+      "name": "MedicalCategory",
+      "item": [
+        {
+          "name": "Crear MedicalCategory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/medical-categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "medical-categories"
+              ]
             },
-            {
-              "key": "file",
-              "type": "file",
-              "src": []
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cardiología\",\n  \"description\": \"Enfermedades del corazón\",\n  \"category_parent_id\": null\n}"
             }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Listar ECGs de un paciente",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/patients/{{patientId}}/ecgs",
-          "host": ["{{baseUrl}}"],
-          "path": ["patients", "{{patientId}}", "ecgs"]
-        }
-      }
-    },
-    {
-      "name": "Ver un ECG",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/ecgs/{{ecgId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["ecgs", "{{ecgId}}"]
-        }
-      }
-    },
-    {
-      "name": "Eliminar ECG",
-      "request": {
-        "method": "DELETE",
-        "url": {
-          "raw": "{{baseUrl}}/ecgs/{{ecgId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["ecgs", "{{ecgId}}"]
-        }
-      }
-    },
-    {
-      "name": "Crear categoría",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
           }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/categories",
-          "host": ["{{baseUrl}}"],
-          "path": ["categories"]
         },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Cardiología\",\n  \"description\": \"Enfermedades del corazón\",\n  \"category_parent_id\": null\n}"
-        }
-      }
-    },
-    {
-      "name": "Listar categorías",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/categories?page=1&pageSize=10",
-          "host": ["{{baseUrl}}"],
-          "path": ["categories"],
-          "query": [
-            { "key": "page", "value": "1" },
-            { "key": "pageSize", "value": "10" }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Ver una categoría",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{baseUrl}}/categories/{{categoryId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["categories", "{{categoryId}}"]
-        }
-      }
-    },
-    {
-      "name": "Actualizar categoría",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+        {
+          "name": "Listar MedicalCategory",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/medical-categories?page=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "medical-categories"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
           }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/categories/{{categoryId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["categories", "{{categoryId}}"]
         },
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Cardiología pediátrica\",\n  \"category_parent_id\": {{categoryId}}\n}"
+        {
+          "name": "Ver MedicalCategory",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/medical-categories/{{medicalCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "medical-categories",
+                "{{medicalCategoryId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar MedicalCategory",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/medical-categories/{{medicalCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "medical-categories",
+                "{{medicalCategoryId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cardiología pediátrica\",\n  \"description\": \"Subcategoría clínica\",\n  \"category_parent_id\": null\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar MedicalCategory",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/medical-categories/{{medicalCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "medical-categories",
+                "{{medicalCategoryId}}"
+              ]
+            }
+          }
         }
-      }
+      ]
     },
     {
-      "name": "Eliminar categoría",
-      "request": {
-        "method": "DELETE",
-        "url": {
-          "raw": "{{baseUrl}}/categories/{{categoryId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["categories", "{{categoryId}}"]
+      "name": "AIModelCategory",
+      "item": [
+        {
+          "name": "Crear AIModelCategory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ai-model-categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai-model-categories"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Modelos diagnósticos\",\n  \"description\": \"Categoría raíz para modelos de IA\",\n  \"category_parent_id\": null\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar AIModelCategory",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/ai-model-categories?page=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai-model-categories"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver AIModelCategory",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/ai-model-categories/{{aiModelCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai-model-categories",
+                "{{aiModelCategoryId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar AIModelCategory",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/ai-model-categories/{{aiModelCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai-model-categories",
+                "{{aiModelCategoryId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Modelos diagnósticos avanzados\",\n  \"description\": \"Subcategoría de IA\",\n  \"category_parent_id\": null\n}"
+            }
+          }
+        },
+        {
+          "name": "Eliminar AIModelCategory",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/ai-model-categories/{{aiModelCategoryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ai-model-categories",
+                "{{aiModelCategoryId}}"
+              ]
+            }
+          }
         }
-      }
+      ]
     }
   ]
 }

@@ -1,10 +1,2 @@
-from dataclasses import dataclass
-from typing import Optional
+from models.entity.medical_category_entity import MedicalCategoryEntity as CategoryEntity
 
-
-@dataclass
-class CategoryEntity:
-    name: str
-    description: Optional[str] = None
-    category_parent_id: Optional[int] = None
-    id: Optional[int] = None
