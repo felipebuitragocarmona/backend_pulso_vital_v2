@@ -4,6 +4,7 @@ from typing import Any
 from fastmcp import FastMCP
 from fastmcp.apps.file_upload import FileUpload
 
+from business.category_service import CategoryService
 from business.ecg_service import EcgService
 from business.patient_service import PatientService
 from data.repository_factory import get_repositories
@@ -61,3 +62,4 @@ ecg_service = EcgService(
     ecg_repo=repositories.ecgs,
     patient_repo=repositories.patients,
 )
+category_service = CategoryService(repo=repositories.categories)

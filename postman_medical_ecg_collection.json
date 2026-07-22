@@ -16,6 +16,10 @@
     {
       "key": "ecgId",
       "value": "1"
+    },
+    {
+      "key": "categoryId",
+      "value": "1"
     }
   ],
   "item": [
@@ -150,6 +154,85 @@
           "raw": "{{baseUrl}}/ecgs/{{ecgId}}",
           "host": ["{{baseUrl}}"],
           "path": ["ecgs", "{{ecgId}}"]
+        }
+      }
+    },
+    {
+      "name": "Crear categoría",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/categories",
+          "host": ["{{baseUrl}}"],
+          "path": ["categories"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Cardiología\",\n  \"description\": \"Enfermedades del corazón\",\n  \"category_parent_id\": null\n}"
+        }
+      }
+    },
+    {
+      "name": "Listar categorías",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/categories?page=1&pageSize=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["categories"],
+          "query": [
+            { "key": "page", "value": "1" },
+            { "key": "pageSize", "value": "10" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ver una categoría",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/categories/{{categoryId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["categories", "{{categoryId}}"]
+        }
+      }
+    },
+    {
+      "name": "Actualizar categoría",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/categories/{{categoryId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["categories", "{{categoryId}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Cardiología pediátrica\",\n  \"category_parent_id\": {{categoryId}}\n}"
+        }
+      }
+    },
+    {
+      "name": "Eliminar categoría",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/categories/{{categoryId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["categories", "{{categoryId}}"]
         }
       }
     }

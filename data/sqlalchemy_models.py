@@ -39,3 +39,24 @@ class EcgORM(Base):
     uploadedAt: Mapped[str] = mapped_column(String(40), nullable=False)
 
     patient: Mapped[PatientORM] = relationship(back_populates="ecgs")
+
+
+class CategoryORM(Base):
+    __tablename__ = "categories"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    category_parent_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("categories.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
+    parent: Mapped[Optional["CategoryORM"]] = relationship(
+        remote_side=[id],
+        back_populates="children",
+    )
+    children: Mapped[List["CategoryORM"]] = relationship(
+        back_populates="parent",
+    )

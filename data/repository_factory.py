@@ -5,6 +5,7 @@ from functools import lru_cache
 
 from dotenv import load_dotenv
 
+from .category_repository import CategoryRepository
 from .database import Database
 from .ecg_repository import EcgRepository
 from .patient_repository import PatientRepository
@@ -24,6 +25,7 @@ class RepositoryProvider:
     database: Database
     patients: PatientRepository
     ecgs: EcgRepository
+    categories: CategoryRepository
 
 
 class RelationalRepositoryFactory:
@@ -38,6 +40,7 @@ class RelationalRepositoryFactory:
             database=self.database,
             patients=PatientRepository(self.database.SessionLocal),
             ecgs=EcgRepository(self.database.SessionLocal),
+            categories=CategoryRepository(self.database.SessionLocal),
         )
 
 
