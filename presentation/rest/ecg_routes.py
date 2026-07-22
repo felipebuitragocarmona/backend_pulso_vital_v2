@@ -1,6 +1,6 @@
-from typing import List
+from typing import Any, Dict, List
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile
 
 from business.ecg_service import EcgService
 from data.repository_factory import get_repositories
@@ -34,9 +34,13 @@ async def upload_patient_ecg(
     return result
 
 
-@router.get("/patients/{patient_id}/ecgs", response_model=List[Ecg])
-def list_patient_ecgs(patient_id: int):
-    result = ecg_service.list_patient_ecgs(patient_id)
+@router.get("/patients/{patient_id}/ecgs", response_model=Dict[str, Any])
+def list_patient_ecgs(
+    patient_id: int,
+    page: int = Query(default=1, ge=1),
+    pageSize: int = Query(default=10, ge=1, le=100),
+):
+    result = ecg_service.list_patient_ecgs_paged(patient_id, page, pageSize)
     if isinstance(result, dict) and result.get("error"):
         raise HTTPException(status_code=404, detail=result["error"])
     return result

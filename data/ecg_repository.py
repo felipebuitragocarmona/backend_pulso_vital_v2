@@ -1,6 +1,6 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from models.entity.ecg_entity import EcgEntity
 
@@ -25,3 +25,18 @@ class EcgRepository(GenericRepository[EcgORM, EcgEntity]):
                 .order_by(EcgORM.id.asc())
             ).all()
             return [self._to_dict(row) for row in rows]
+
+    def find_by_patient_id_paged(
+        self, patient_id: int, page: int, page_size: int
+    ) -> Tuple[List[Dict[str, Any]], int]:
+        """Retorna una página de ECGs de un paciente y el total de registros."""
+        with self.session_factory() as session:
+            base_query = select(EcgORM).where(EcgORM.patientId == int(patient_id))
+            total: int = (
+                session.scalar(select(func.count()).select_from(base_query.subquery())) or 0
+            )
+            offset = (page - 1) * page_size
+            rows = session.scalars(
+                base_query.order_by(EcgORM.id.asc()).offset(offset).limit(page_size)
+            ).all()
+            return [self._to_dict(row) for row in rows], total

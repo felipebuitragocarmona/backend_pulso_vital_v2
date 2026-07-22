@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
+import math
 from uuid import uuid4
 
 from business.extraction.ecg_extraction_service import EcgExtractionService
@@ -141,6 +142,23 @@ class EcgService:
             return {"error": "Paciente no encontrado"}
 
         return [Ecg(**ecg) for ecg in self.ecg_repo.find_by_patient_id(patient_id)]
+
+    def list_patient_ecgs_paged(
+        self, patient_id: int, page: int, page_size: int
+    ) -> Union[Dict[str, Any], Dict[str, Any]]:
+        patient_id = int(patient_id)
+
+        if not self.patient_repo.exists_by_id(patient_id):
+            return {"error": "Paciente no encontrado"}
+
+        items, total = self.ecg_repo.find_by_patient_id_paged(patient_id, page, page_size)
+        return {
+            "data": [Ecg(**ecg) for ecg in items],
+            "page": page,
+            "pageSize": page_size,
+            "totalItems": total,
+            "totalPages": math.ceil(total / page_size) if page_size > 0 else 0,
+        }
 
     def get_ecg(self, ecg_id: int) -> Optional[Ecg]:
         ecg = self.ecg_repo.find_by_id(int(ecg_id))
